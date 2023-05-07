@@ -26,7 +26,18 @@ jobs:
         run: |
           cat <<EOF > init.el
           (require 'package)
+          (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
           (package-refresh-contents)
           (package-install 'compat)
+          (package-install 'undercover)
+
+          (when (require 'undercover nil t)
+            (undercover "*.el" (:report-format 'codecov) (:send-report nil)))
           EOF
-          emacs -Q --batch -L . -l init.el -l selrgn-tests.el -f ert-run-tests-batch-and-exit
+          cat init.el
+          emacs --batch -L . -l init.el -l selrgn-tests.el -f ert-run-tests-batch-and-exit
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
