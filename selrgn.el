@@ -1,5 +1,34 @@
-;;; selrgn.el --- Select region in Emacs  -*- lexical-binding:t -*-
+;;; selrgn.el --- Select region by things  -*- lexical-binding:t -*-
+
+;; Copyright (C) 2023 Iku Iwasa
+
+;; Author: Iku Iwasa <iku.iwasa@gmail.com>
+;; Version: 0.1.0
+;; Keywords: matching
+;; Package-Requires: ((emacs "27.1"))
+;; Homepage: https://github.com/iquiw/selrgn
+
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
+;;
+;; Select region by things.
+;;
+
 ;;; Code:
 (require 'text-property-search)
 (require 'thingatpt)
@@ -20,8 +49,7 @@
   "s" #'selrgn-string
   "u" #'selrgn-url
   "v" #'selrgn-version
-  "w" #'selrgn-word
-  )
+  "w" #'selrgn-word)
 
 (defun selrgn-enlarge (num)
   "Enlarge both sides of region by NUM characters."
