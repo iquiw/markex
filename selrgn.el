@@ -5,7 +5,7 @@
 ;; Author: Iku Iwasa <iku.iwasa@gmail.com>
 ;; Version: 0.1.0
 ;; Keywords: matching
-;; Package-Requires: ((emacs "27.1"))
+;; Package-Requires: ((emacs "27.1") (compat "29.1.1.1"))
 ;; Homepage: https://github.com/iquiw/selrgn
 
 
@@ -32,6 +32,8 @@
 ;;; Code:
 (require 'text-property-search)
 (require 'thingatpt)
+
+(require 'compat)
 
 (defvar-keymap selrgn-command-map
   :prefix 'selrgn-prefix-command
