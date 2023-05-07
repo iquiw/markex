@@ -22,20 +22,12 @@ jobs:
         with:
           version: ${{ matrix.emacs_version }}
 
+      - name: Install Eldev
+        run: curl -fsSL https://raw.github.com/doublep/eldev/master/webinstall/github-eldev | sh
+
       - name: Run tests
         run: |
-          cat <<EOF > init.el
-          (require 'package)
-          (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-          (package-refresh-contents)
-          (package-install 'compat)
-          (package-install 'undercover)
-
-          (when (require 'undercover nil t)
-            (undercover "*.el" (:report-format 'codecov) (:send-report nil)))
-          EOF
-          cat init.el
-          emacs --batch -L . -l init.el -l selrgn-tests.el -f ert-run-tests-batch-and-exit
+          eldev -dtT test -u codecov,dontsend
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
