@@ -208,4 +208,4 @@ BOUNDS is a cons of (beg . end) region."
       (goto-char beg))))
 
 (provide 'selrgn)
-;;; selrgn.el ends here.
+;;; selrgn.el ends here

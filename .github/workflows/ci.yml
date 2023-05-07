@@ -25,9 +25,11 @@ jobs:
       - name: Install Eldev
         run: curl -fsSL https://raw.github.com/doublep/eldev/master/webinstall/github-eldev | sh
 
+      - name: Lint
+        run: eldev lint
+
       - name: Run tests
-        run: |
-          eldev -dtT test -u codecov,dontsend
+        run: eldev -dtT test -u codecov,dontsend
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
