@@ -124,6 +124,9 @@
             )
           (1- (point))))))))
 
+;;
+;; Select region by regexp.
+;;
 (defun selrgn-ipv4 ()
   "Select IPv4 address region."
   (interactive)

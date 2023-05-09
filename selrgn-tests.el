@@ -50,3 +50,14 @@ Check if point is not moved."
   (selrgn--test-unmatch #'selrgn-mac "00:00:0000:00:00")
   (selrgn--test-unmatch #'selrgn-mac " 00:11:22:gg:bb:cc  " :start 5)
   (selrgn--test-unmatch #'selrgn-mac " \"FF:FF:FF:FF::FF:FF\" " :start 19))
+
+(ert-deftest selrgn-version--test-match ()
+  (selrgn--test-match #'selrgn-version "1.2.3" 1 6)
+  (selrgn--test-match #'selrgn-version "foo-10.200.300 " 5 15 :start 5)
+  (selrgn--test-match #'selrgn-version " \"2023.05.09.1\" " 3 15 :start 10))
+
+(ert-deftest selrgn-version--test-unmatch ()
+  (selrgn--test-unmatch #'selrgn-version "foobar")
+  (selrgn--test-unmatch #'selrgn-version " gg:bb:cc  " :start 5)
+  (selrgn--test-unmatch #'selrgn-version " \"'!@#'\" " :start 3))
+
