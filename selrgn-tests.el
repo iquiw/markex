@@ -61,3 +61,14 @@ Check if point is not moved."
   (selrgn--test-unmatch #'selrgn-version " gg:bb:cc  " :start 5)
   (selrgn--test-unmatch #'selrgn-version " \"'!@#'\" " :start 3))
 
+(ert-deftest selrgn-string--test-match ()
+  (selrgn--test-match #'selrgn-string "\"Hello, wolrd.\"" 2 15 :start 3)
+  (selrgn--test-match #'selrgn-string "  \"foo\\\"bar\" " 4 12 :start 5)
+  (selrgn--test-match #'selrgn-string " \"foo\" " 3 6 :start 2)
+  (selrgn--test-match #'selrgn-string " \"foo\" " 3 6 :start 6)
+  (selrgn--test-match #'selrgn-string "\" \"" 2 3 :start 2))
+
+(ert-deftest selrgn-string--test-unmatch ()
+  (selrgn--test-unmatch #'selrgn-string "foo")
+  (selrgn--test-unmatch #'selrgn-string " \"foo\" " :start 1)
+  (selrgn--test-unmatch #'selrgn-string " \"foo\" " :start 7))

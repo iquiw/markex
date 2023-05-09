@@ -94,6 +94,9 @@
       (prop-match-end prop-beg)
       (prop-match-beginning prop-end)))))
 
+;;
+;; Select region by syntax.
+;;
 (defun selrgn-pair ()
   "Select pair region."
   (interactive)
@@ -111,18 +114,27 @@
   "Select inside string region."
   (interactive)
   (let ((ppss (syntax-ppss)))
-    (when (ppss-string-terminator ppss)
-      (selrgn--select-bounds
-       (cons
-        (1+ (ppss-comment-or-string-start ppss))
-        (save-excursion
-          (while (and (< 0 (skip-syntax-forward "^\"|"))
-                      (progn
-                        (forward-char 1)
-                        (ppss-string-terminator (syntax-ppss))))
-                                        ; nop
-            )
-          (1- (point))))))))
+    (when (or (ppss-string-terminator ppss)
+              ;; in case of start of string.
+              (and (not (eobp))
+                   (setq ppss (save-excursion (syntax-ppss (1+ (point)))))
+                   (ppss-string-terminator ppss)))
+      (let ((beg (1+ (ppss-comment-or-string-start ppss))))
+        (selrgn--select-bounds
+         (cons
+          beg
+          (save-excursion
+            (let ((start (point)))
+              (goto-char beg)
+              (while (and (< 0 (skip-syntax-forward "^\"|"))
+                          (progn
+                            (forward-char 1)
+                            (ppss-string-terminator (syntax-ppss))))
+                ;; nop
+                )
+              (if (eq (point) start)
+                  start
+                (1- (point)))))))))))
 
 ;;
 ;; Select region by regexp.
