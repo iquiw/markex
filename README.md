@@ -1,9 +1,9 @@
-# Selrgn
+# MarkEx
 
-[![CI](https://github.com/iquiw/selrgn/actions/workflows/ci.yml/badge.svg)](https://github.com/iquiw/selrgn/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/iquiw/selrgn/branch/main/graph/badge.svg?token=Hgq8QKnHsa)](https://codecov.io/gh/iquiw/selrgn)
+[![CI](https://github.com/iquiw/markex/actions/workflows/ci.yml/badge.svg)](https://github.com/iquiw/markex/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/iquiw/markex/branch/main/graph/badge.svg?token=Hgq8QKnHsa)](https://codecov.io/gh/iquiw/markex)
 
-Select region by things.
+Mark things extra.
 
 ## License
 

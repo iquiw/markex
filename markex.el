@@ -1,4 +1,4 @@
-;;; selrgn.el --- Select region by things  -*- lexical-binding:t -*-
+;;; markex.el --- Mark things extra  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023 Iku Iwasa
 
@@ -6,7 +6,7 @@
 ;; Version: 0.1.0
 ;; Keywords: matching
 ;; Package-Requires: ((emacs "27.1") (compat "29.1.1.1"))
-;; Homepage: https://github.com/iquiw/selrgn
+;; Homepage: https://github.com/iquiw/markex
 
 
 ;; This file is not part of GNU Emacs.
@@ -35,25 +35,25 @@
 
 (require 'compat)
 
-(defvar-keymap selrgn-command-map
-  :prefix 'selrgn-prefix-command
-  "#" #'selrgn-number
-  "'" #'selrgn-symbol
-  "+" #'selrgn-enlarge
-  "-" #'selrgn-shrink
-  "/" #'selrgn-filename
-  "4" #'selrgn-ipv4
-  "U" #'selrgn-uuid
-  "e" #'selrgn-email
-  "f" #'selrgn-face
-  "m" #'selrgn-mac
-  "p" #'selrgn-pair
-  "s" #'selrgn-string
-  "u" #'selrgn-url
-  "v" #'selrgn-version
-  "w" #'selrgn-word)
+(defvar-keymap markex-command-map
+  :prefix 'markex-prefix-command
+  "#" #'markex-number
+  "'" #'markex-symbol
+  "+" #'markex-enlarge
+  "-" #'markex-shrink
+  "/" #'markex-filename
+  "4" #'markex-ipv4
+  "U" #'markex-uuid
+  "e" #'markex-email
+  "f" #'markex-face
+  "m" #'markex-mac
+  "p" #'markex-pair
+  "s" #'markex-string
+  "u" #'markex-url
+  "v" #'markex-version
+  "w" #'markex-word)
 
-(defun selrgn-enlarge (num)
+(defun markex-enlarge (num)
   "Enlarge both sides of region by NUM characters."
   (interactive "p")
   (when (use-region-p)
@@ -62,7 +62,7 @@
       (set-mark (min end (point-max)))
       (goto-char (max beg (point-min))))))
 
-(defun selrgn-shrink (num)
+(defun markex-shrink (num)
   "Shrink both sides of region by NUM characters."
   (interactive "p")
   (when (use-region-p)
@@ -72,24 +72,24 @@
         (set-mark end)
         (goto-char beg)))))
 
-(defun selrgn--face-change-p (face condition)
+(defun markex--face-change-p (face condition)
   "Return nil if FACE does not match with CONDITION."
   (cond
    ((not condition) t)
    ((listp condition) (not (member face condition)))
    (t (not (equal face condition)))))
 
-(defun selrgn-face ()
+(defun markex-face ()
   "Select region with the same face."
   (interactive)
   (when-let* ((face (face-at-point))
               (prop-end (save-excursion
                           (text-property-search-forward
-                           'face face #'selrgn--face-change-p)))
+                           'face face #'markex--face-change-p)))
               (prop-beg (save-excursion
                           (text-property-search-backward
-                           'face face #'selrgn--face-change-p))))
-    (selrgn--select-bounds
+                           'face face #'markex--face-change-p))))
+    (markex--select-bounds
      (cons
       (prop-match-end prop-beg)
       (prop-match-beginning prop-end)))))
@@ -97,20 +97,20 @@
 ;;
 ;; Select region by syntax.
 ;;
-(defun selrgn-pair ()
+(defun markex-pair ()
   "Select pair region."
   (interactive)
   (let ((ppss (syntax-ppss)))
     (when (< 0 (ppss-depth ppss))
       (let ((beg (ppss-innermost-start ppss)))
-        (selrgn--select-bounds
+        (markex--select-bounds
          (cons beg
                (save-excursion
                  (goto-char beg)
                  (forward-sexp)
                  (point))))))))
 
-(defun selrgn-string ()
+(defun markex-string ()
   "Select inside string region."
   (interactive)
   (let ((ppss (syntax-ppss)))
@@ -120,7 +120,7 @@
                    (setq ppss (save-excursion (syntax-ppss (1+ (point)))))
                    (ppss-string-terminator ppss)))
       (let ((beg (1+ (ppss-comment-or-string-start ppss))))
-        (selrgn--select-bounds
+        (markex--select-bounds
          (cons
           beg
           (save-excursion
@@ -139,78 +139,78 @@
 ;;
 ;; Select region by regexp.
 ;;
-(defun selrgn-ipv4 ()
+(defun markex-ipv4 ()
   "Select IPv4 address region."
   (interactive)
-  (selrgn--regexp "0-9." "\\(?:\\(?:0\\|[1-9][0-9]\\{0,2\\}\\)\\.\\)\\{3\\}\\(?:0\\|[1-9][0-9]\\{0,2\\}\\)"))
+  (markex--regexp "0-9." "\\(?:\\(?:0\\|[1-9][0-9]\\{0,2\\}\\)\\.\\)\\{3\\}\\(?:0\\|[1-9][0-9]\\{0,2\\}\\)"))
 
-(defun selrgn-mac ()
+(defun markex-mac ()
   "Select MAC address region."
   (interactive)
-  (selrgn--regexp "0-9a-fA-F:" "\\(?:[0-9a-fA-F]\\{2\\}:\\)\\{5\\}\\(?:[0-9a-fA-F]\\{2\\}\\)"))
+  (markex--regexp "0-9a-fA-F:" "\\(?:[0-9a-fA-F]\\{2\\}:\\)\\{5\\}\\(?:[0-9a-fA-F]\\{2\\}\\)"))
 
-(defun selrgn-version ()
+(defun markex-version ()
   "Select version-like region."
   (interactive)
-  (selrgn--regexp "0-9." "\\(?:[0-9]+\\.\\)+[0-9]+"))
+  (markex--regexp "0-9." "\\(?:[0-9]+\\.\\)+[0-9]+"))
 
-(defun selrgn--regexp (chars regexp)
+(defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
 First, it skip the CHARS backwards and regexp match with REGEXP."
   (when-let ((bounds (save-excursion
                        (when (and (skip-chars-backward chars)
                                   (looking-at regexp))
                          (cons (point) (match-end 0))))))
-    (selrgn--select-bounds bounds)))
+    (markex--select-bounds bounds)))
 
 ;;
 ;; Select region using thingatpt.
 ;;
-(defun selrgn-email ()
+(defun markex-email ()
   "Select E-mail region."
   (interactive)
-  (selrgn--thing 'email))
+  (markex--thing 'email))
 
-(defun selrgn-filename ()
+(defun markex-filename ()
   "Select filename region."
   (interactive)
-  (selrgn--thing 'filename))
+  (markex--thing 'filename))
 
-(defun selrgn-number ()
+(defun markex-number ()
   "Select number region."
   (interactive)
-  (selrgn--thing 'number))
+  (markex--thing 'number))
 
-(defun selrgn-symbol ()
+(defun markex-symbol ()
   "Select word region."
   (interactive)
-  (selrgn--thing 'symbol))
+  (markex--thing 'symbol))
 
-(defun selrgn-url ()
+(defun markex-url ()
   "Select URL region."
   (interactive)
-  (selrgn--thing 'url))
+  (markex--thing 'url))
 
-(defun selrgn-uuid ()
+(defun markex-uuid ()
   "Select UUID region."
   (interactive)
-  (selrgn--thing 'uuid))
+  (markex--thing 'uuid))
 
-(defun selrgn-word ()
+(defun markex-word ()
   "Select word region."
   (interactive)
-  (selrgn--thing 'word))
+  (markex--thing 'word))
 
-(defun selrgn--thing (thing)
+(defun markex--thing (thing)
   "Select a thing at the point.
 THING is the same meaing as in `bounds-of-thing-at-point'."
   (when-let ((bounds (bounds-of-thing-at-point thing)))
-    (selrgn--select-bounds bounds)))
+    (markex--select-bounds bounds)))
 
 ;;
 ;; Select region by bounds.
 ;;
-(defun selrgn--select-bounds (bounds)
+(defun markex--select-bounds (bounds)
   "Select region specified by BOUNDS.
 BOUNDS is a cons of (beg . end) region."
   (let ((beg (car bounds))
@@ -222,5 +222,5 @@ BOUNDS is a cons of (beg . end) region."
       (set-mark end)
       (goto-char beg))))
 
-(provide 'selrgn)
-;;; selrgn.el ends here
+(provide 'markex)
+;;; markex.el ends here
