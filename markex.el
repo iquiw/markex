@@ -158,6 +158,12 @@
   (interactive)
   (markex--regexp "0-9." "\\(?:[0-9]+\\.\\)+[0-9]+"))
 
+(defun markex-number ()
+  "Select number region."
+  (interactive)
+  (or (markex--regexp "#x0-9a-fA-F" "\\(0x\\|#x\\)\\([a-fA-F0-9]+\\)")
+      (markex--regexp "0-9.-" "-?[0-9]+\\.?[0-9]*")))
+
 (defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
 First, it skip the CHARS backwards and regexp match with REGEXP."
@@ -179,11 +185,6 @@ First, it skip the CHARS backwards and regexp match with REGEXP."
   "Select filename region."
   (interactive)
   (markex--thing 'filename))
-
-(defun markex-number ()
-  "Select number region."
-  (interactive)
-  (markex--thing 'number))
 
 (defun markex-symbol ()
   "Select word region."

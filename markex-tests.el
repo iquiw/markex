@@ -55,6 +55,17 @@ Check if point is not moved."
   (markex--test-unmatch #'markex-version " gg:bb:cc  " :start 5)
   (markex--test-unmatch #'markex-version " \"'!@#'\" " :start 3))
 
+(ert-deftest markex-number--test-match ()
+  (markex--test-match #'markex-number "(setq foo 123)" 11 14 :start 13)
+  (markex--test-match #'markex-number " 0x001122334455 " 2 16 :start 15)
+  (markex--test-match #'markex-number " #xaabbCCDDeeff " 2 16 :start 3)
+  (markex--test-match #'markex-number "-14.5" 1 6 :start 3))
+
+(ert-deftest markex-number--test-unmatch ()
+  (markex--test-unmatch #'markex-number "(setq foo 123)" :start 3)
+  (markex--test-unmatch #'markex-number "123  456" :start 5)
+  (markex--test-unmatch #'markex-number "#xgghhIIJJkkll" :start 5))
+
 (ert-deftest markex-string--test-match ()
   (markex--test-match #'markex-string "\"Hello, wolrd.\"" 2 15 :start 3)
   (markex--test-match #'markex-string "  \"foo\\\"bar\" " 4 12 :start 5)
@@ -136,9 +147,6 @@ EOF
 
 (ert-deftest markex-filename--test-match ()
   (markex--test-match #'markex-filename "[foo](/usr/local/etc/foo)" 7 25 :start 10))
-
-(ert-deftest markex-number--test-match ()
-  (markex--test-match #'markex-number "(setq foo 123)" 11 14 :start 13))
 
 (ert-deftest markex-url--test-match ()
   (markex--test-match #'markex-url "[foo](https://example.com/foo)" 7 30 :start 20))
