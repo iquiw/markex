@@ -83,16 +83,19 @@
   "Select region with the same face."
   (interactive)
   (when-let* ((face (face-at-point))
-              (prop-end (save-excursion
-                          (text-property-search-forward
-                           'face face #'markex--face-change-p)))
-              (prop-beg (save-excursion
-                          (text-property-search-backward
-                           'face face #'markex--face-change-p))))
-    (markex--select-bounds
-     (cons
-      (prop-match-end prop-beg)
-      (prop-match-beginning prop-end)))))
+              (end (save-excursion
+                     (let ((prop (text-property-search-forward
+                                  'face face #'markex--face-change-p)))
+                       (if prop
+                           (prop-match-beginning prop)
+                         (point-max)))))
+              (beg (save-excursion
+                     (let ((prop (text-property-search-backward
+                                  'face face #'markex--face-change-p)))
+                       (if prop
+                           (prop-match-end prop)
+                         (point-min))))))
+    (markex--select-bounds (cons beg end))))
 
 ;;
 ;; Select region by syntax.

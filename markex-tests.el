@@ -87,3 +87,43 @@ Check if point is not moved."
   (markex--test-unmatch #'markex-pair " Hello wolrd " :start 7)
   (markex--test-unmatch #'markex-pair " (Hello wolrd) " :start 1)
   (markex--test-unmatch #'markex-pair " (Hello wolrd) " :start 15))
+
+(ert-deftest markex-face--test-match ()
+  (with-temp-buffer
+    (insert "cat <<EOF
+foo
+EOF
+")
+    (put-text-property 10 18 'face 'font-lock-doc-face)
+    (goto-char 12)
+    (should (markex-face))
+    (should (eq (point) 10))
+    (should (eq (mark) 18)))
+
+  (with-temp-buffer
+    (insert "echo")
+    (put-text-property 1 5 'face 'font-lock-builtin-face)
+    (goto-char 1)
+    (should (markex-face))
+    (should (eq (point) 1))
+    (should (eq (mark) 5))))
+
+(ert-deftest markex-face--test-unmatch ()
+  (with-temp-buffer
+    (insert "cat <<EOF
+foo
+EOF
+")
+    (put-text-property 10 18 'face 'font-lock-doc-face)
+    (goto-char 1)
+    (should (not (markex-face)))
+    (should (eq (point) 1))
+    (should (not (mark))))
+
+  (with-temp-buffer
+    (insert "echo foo")
+    (put-text-property 1 4 'face 'font-lock-builtin-face)
+    (goto-char 5)
+    (should (not (markex-face)))
+    (should (eq (point) 5))
+    (should (not (mark)))))
