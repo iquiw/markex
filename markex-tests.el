@@ -2,30 +2,24 @@
 
 (require 'markex)
 
-(cl-defun markex--test-match (func contents point mark &key mode start)
+(cl-defun markex--test-match (func contents point mark &key start)
   "Call FUNC in a buffer with CONTENTS.
 Check if region beginnig equals to POINT and region end equals to MARK.
-If MODE is non-nil, enable the mode.
 If START is non-nil, go to the point."
   (with-temp-buffer
     (insert contents)
-    (when mode
-      (funcall mode))
     (when start
       (goto-char start))
     (should (funcall func))
     (should (eq (point) point))
     (should (eq (mark) mark))))
 
-(cl-defun markex--test-unmatch (func contents &key mode start)
+(cl-defun markex--test-unmatch (func contents &key start)
   "Call FUNC in a buffer with CONTENTS.
-If MODE is non-nil, enable the mode.
 If START is non-nil, go to the point.
 Check if point is not moved."
   (with-temp-buffer
     (insert contents)
-    (when mode
-      (funcall mode))
     (setq start (or start (point)))
     (goto-char start)
     (should (not (funcall func)))
