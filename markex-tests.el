@@ -136,3 +136,24 @@ EOF
     (should (not (markex-face)))
     (should (eq (point) 5))
     (should (not (mark)))))
+
+(ert-deftest markex-email--test-match ()
+  (markex--test-match #'markex-email "\"foo@example.com\"" 2 17 :start 8))
+
+(ert-deftest markex-filename--test-match ()
+  (markex--test-match #'markex-filename "[foo](/usr/local/etc/foo)" 7 25 :start 10))
+
+(ert-deftest markex-number--test-match ()
+  (markex--test-match #'markex-number "(setq foo 123)" 11 14 :start 13))
+
+(ert-deftest markex-url--test-match ()
+  (markex--test-match #'markex-url "[foo](https://example.com/foo)" 7 30 :start 20))
+
+(ert-deftest markex-uuid--test-match ()
+  (markex--test-match #'markex-uuid "\"cfdf577b-5225-47ce-acdb-d4687d8420aa\"" 2 38 :start 2))
+
+(ert-deftest markex-symbol--test-match ()
+  (markex--test-match #'markex-symbol " (foo-bar baz)" 3 10 :start 3))
+
+(ert-deftest markex-word--test-match ()
+  (markex--test-match #'markex-word "foo-bar-baz" 5 8 :start 6))
