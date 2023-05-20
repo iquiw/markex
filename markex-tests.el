@@ -71,7 +71,9 @@ Check if point is not moved."
 (ert-deftest markex-string--test-unmatch ()
   (markex--test-unmatch #'markex-string "foo")
   (markex--test-unmatch #'markex-string " \"foo\" " :start 1)
-  (markex--test-unmatch #'markex-string " \"foo\" " :start 7))
+  (markex--test-unmatch #'markex-string " \"foo\" " :start 7)
+  (markex--test-unmatch #'markex-string " \"\" " :start 2)
+  (markex--test-unmatch #'markex-string " \"\" " :start 3))
 
 (ert-deftest markex-pair--test-match ()
   (markex--test-match #'markex-pair " (Hello wolrd) " 2 15 :start 5)

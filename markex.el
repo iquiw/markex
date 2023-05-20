@@ -126,17 +126,16 @@
          (cons
           beg
           (save-excursion
-            (let ((start (point)))
-              (goto-char beg)
-              (while (and (< 0 (skip-syntax-forward "^\"|"))
-                          (progn
-                            (forward-char 1)
-                            (ppss-string-terminator (syntax-ppss))))
-                ;; nop
-                )
-              (if (eq (point) start)
-                  start
-                (1- (point)))))))))))
+            (goto-char beg)
+            (while (and (< 0 (skip-syntax-forward "^\"|"))
+                        (progn
+                          (forward-char 1)
+                          (ppss-string-terminator (syntax-ppss))))
+              ;; nop
+              )
+            (if (eq (point) beg)
+                beg
+              (1- (point))))))))))
 
 ;;
 ;; Select region by regexp.
