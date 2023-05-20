@@ -109,7 +109,7 @@
          (cons beg
                (save-excursion
                  (goto-char beg)
-                 (forward-sexp)
+                 (forward-list)
                  (point))))))))
 
 (defun markex-string ()
