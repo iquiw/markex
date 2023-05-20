@@ -106,7 +106,16 @@ EOF
     (goto-char 1)
     (should (markex-face))
     (should (eq (point) 1))
-    (should (eq (mark) 5))))
+    (should (eq (mark) 5)))
+
+  (with-temp-buffer
+    (insert "$(echo foo)")
+    (put-text-property 3 11 'face 'font-lock-constant-face)
+    (put-text-property 3 7 'face '(font-lock-constant-face font-lock-builtin-face))
+    (goto-char 8)
+    (should (markex-face))
+    (should (eq (point) 3))
+    (should (eq (mark) 11))))
 
 (ert-deftest markex-face--test-unmatch ()
   (with-temp-buffer
