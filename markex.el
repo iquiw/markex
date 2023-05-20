@@ -100,7 +100,9 @@
 (defun markex-pair ()
   "Select pair region."
   (interactive)
-  (let ((ppss (syntax-ppss)))
+  (let ((ppss (if (= (syntax-class (syntax-after (point))) 4)
+                  (save-excursion (syntax-ppss (1+ (point))))
+                (syntax-ppss))))
     (when (< 0 (ppss-depth ppss))
       (let ((beg (ppss-innermost-start ppss)))
         (markex--select-bounds
