@@ -159,3 +159,25 @@ EOF
 
 (ert-deftest markex-word--test-match ()
   (markex--test-match #'markex-word "foo-bar-baz" 5 8 :start 6))
+
+(ert-deftest markex-enlarge--test ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "foo bar baz!")
+    (set-mark 8)
+    (goto-char 5)
+    (markex-enlarge 1)
+    (should (eq (point) 4))
+    (should (eq (mark) 9))
+
+    (markex-enlarge 3)
+    (should (eq (point) 1))
+    (should (eq (mark) 12))
+
+    (markex-enlarge 1)
+    (should (eq (point) 1))
+    (should (eq (mark) 13))
+
+    (markex-enlarge 1)
+    (should (eq (point) 1))
+    (should (eq (mark) 13))))
