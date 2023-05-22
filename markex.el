@@ -44,6 +44,7 @@
   "/" #'markex-filename
   "4" #'markex-ipv4
   "U" #'markex-uuid
+  "c" #'markex-change-region-boundary
   "e" #'markex-email
   "f" #'markex-face
   "m" #'markex-mac
@@ -75,6 +76,23 @@
       (when (<= beg end)
         (set-mark end)
         (goto-char beg)))))
+
+(defun markex-change-region-boundary (char)
+  "Replace one character before region beginnig and one after region end with CHAR."
+  (interactive "cReplace char: ")
+  (when (use-region-p)
+    (let ((beg (region-beginning))
+          (end (region-end)))
+      (unless (or (= beg (point-min))
+                  (= end (point-max)))
+        (save-excursion
+          (goto-char (1- beg))
+          (delete-char 1)
+          (insert char)
+          (goto-char end)
+          (delete-char 1)
+          (insert char))
+        (forward-char)))))
 
 (defun markex-delete-region-boundary ()
   "Delete one character before region beginnig and one after region end."
