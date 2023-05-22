@@ -68,7 +68,7 @@
   (when (use-region-p)
     (let ((beg (+ (region-beginning) num))
           (end (- (region-end) num)))
-      (when (< beg end)
+      (when (<= beg end)
         (set-mark end)
         (goto-char beg)))))
 

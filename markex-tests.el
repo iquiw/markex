@@ -181,3 +181,25 @@ EOF
     (markex-enlarge 1)
     (should (eq (point) 1))
     (should (eq (mark) 13))))
+
+(ert-deftest markex-shrink--test ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "foo bar baz!")
+    (set-mark 13)
+    (goto-char 1)
+    (markex-shrink 1)
+    (should (eq (point) 2))
+    (should (eq (mark) 12))
+
+    (markex-shrink 4)
+    (should (eq (point) 6))
+    (should (eq (mark) 8))
+
+    (markex-shrink 1)
+    (should (eq (point) 7))
+    (should (eq (mark) 7))
+
+    (markex-shrink 1)
+    (should (eq (point) 7))
+    (should (eq (mark) 7))))
