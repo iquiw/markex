@@ -203,3 +203,25 @@ EOF
     (markex-shrink 1)
     (should (eq (point) 7))
     (should (eq (mark) 7))))
+
+(ert-deftest markex-delete-region-boundary--test ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "foo bar baz!")
+    (set-mark 8)
+    (goto-char 5)
+    (markex-delete-region-boundary)
+    (should (equal (buffer-string) "foobarbaz!"))
+    (should (eq (point) 4))
+
+    (set-mark 11)
+    (goto-char 5)
+    (markex-delete-region-boundary)
+    (should (equal (buffer-string) "foobarbaz!"))
+    (should (eq (point) 5))
+
+    (set-mark 5)
+    (goto-char 1)
+    (markex-delete-region-boundary)
+    (should (equal (buffer-string) "foobarbaz!"))
+    (should (eq (point) 1))))

@@ -51,8 +51,12 @@
   "s" #'markex-string
   "u" #'markex-url
   "v" #'markex-version
-  "w" #'markex-word)
+  "w" #'markex-word
+  "x" #'markex-delete-region-boundary)
 
+;;
+;; Region manipulation.
+;;
 (defun markex-enlarge (num)
   "Enlarge both sides of region by NUM characters."
   (interactive "p")
@@ -72,6 +76,20 @@
         (set-mark end)
         (goto-char beg)))))
 
+(defun markex-delete-region-boundary ()
+  "Delete one character before region beginnig and one after region end."
+  (interactive)
+  (when (use-region-p)
+    (let ((beg (region-beginning))
+          (end (region-end)))
+      (unless (or (= beg (point-min))
+                  (= end (point-max)))
+        (delete-region (1- beg) beg)
+        (delete-region (1- end) end)))))
+
+;;
+;; Select region by face.
+;;
 (defun markex--face-change-p (face condition)
   "Return nil if FACE does not match with CONDITION."
   (cond
