@@ -247,3 +247,19 @@ EOF
     (markex-delete-region-boundary)
     (should (equal (buffer-string) "foo-bar-baz!"))
     (should (eq (point) 1))))
+
+(ert-deftest markex-change-region-boundary--test-pair ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "[foo]")
+    (set-mark 5)
+    (goto-char 2)
+    (markex-change-region-boundary ?\()
+    (should (equal (buffer-string) "(foo)"))
+    (should (eq (point) 2))
+
+    (set-mark 5)
+    (goto-char 2)
+    (markex-change-region-boundary ?\})
+    (should (equal (buffer-string) "}foo{"))
+    (should (eq (point) 2))))

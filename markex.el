@@ -91,7 +91,9 @@
           (insert char)
           (goto-char end)
           (delete-char 1)
-          (insert char))
+          (if-let ((pair-char (matching-paren char)))
+              (insert pair-char)
+            (insert char)))
         (forward-char)))))
 
 (defun markex-delete-region-boundary ()
