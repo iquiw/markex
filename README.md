@@ -47,6 +47,7 @@ $ git clone https://github.com/iquiw/markex.git
 | ---          | ---                                   |
 | <kbd>+</kbd> | Enlarge region.                       |
 | <kbd>-</kbd> | Shrink region.                        |
+| <kbd>a</kbd> | Add characters on region boundary.    |
 | <kbd>c</kbd> | Change characters on region boundary. |
 | <kbd>x</kbd> | Delete characters on region boundary. |
 
