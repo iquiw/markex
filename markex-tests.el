@@ -238,13 +238,13 @@ EOF
 
     (set-mark 13)
     (goto-char 5)
-    (markex-delete-region-boundary)
+    (markex-change-region-boundary ?+)
     (should (equal (buffer-string) "foo-bar-baz!"))
     (should (eq (point) 5))
 
     (set-mark 5)
     (goto-char 1)
-    (markex-delete-region-boundary)
+    (markex-change-region-boundary ?=)
     (should (equal (buffer-string) "foo-bar-baz!"))
     (should (eq (point) 1))))
 
@@ -262,4 +262,36 @@ EOF
     (goto-char 2)
     (markex-change-region-boundary ?\})
     (should (equal (buffer-string) "}foo{"))
+    (should (eq (point) 2))))
+
+(ert-deftest markex-add-region-boundary--test ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "foo bar baz!")
+    (set-mark 8)
+    (goto-char 5)
+    (markex-add-region-boundary ?\")
+    (should (equal (buffer-string) "foo \"bar\" baz!"))
+    (should (eq (point) 5))
+
+    (set-mark 15)
+    (goto-char 1)
+    (markex-add-region-boundary ?|)
+    (should (equal (buffer-string) "|foo \"bar\" baz!|"))
+    (should (eq (point) 1))))
+
+(ert-deftest markex-add-region-boundary--test-pair ()
+  (with-temp-buffer
+    (transient-mark-mode 1)
+    (insert "foo")
+    (set-mark 4)
+    (goto-char 1)
+    (markex-add-region-boundary ?\()
+    (should (equal (buffer-string) "(foo)"))
+    (should (eq (point) 1))
+
+    (set-mark 5)
+    (goto-char 2)
+    (markex-add-region-boundary ?\[)
+    (should (equal (buffer-string) "([foo])"))
     (should (eq (point) 2))))

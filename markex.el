@@ -44,6 +44,7 @@
   "/" #'markex-filename
   "4" #'markex-ipv4
   "U" #'markex-uuid
+  "a" #'markex-add-region-boundary
   "c" #'markex-change-region-boundary
   "e" #'markex-email
   "f" #'markex-face
@@ -76,6 +77,20 @@
       (when (<= beg end)
         (set-mark end)
         (goto-char beg)))))
+
+(defun markex-add-region-boundary (char)
+  "Add one character before region beginnig and one after region end with CHAR."
+  (interactive "cAdd char: ")
+  (when (use-region-p)
+    (let ((beg (region-beginning))
+          (end (region-end)))
+      (save-excursion
+        (goto-char beg)
+        (insert char)
+        (goto-char (1+ end))
+        (if-let ((pair-char (matching-paren char)))
+            (insert pair-char)
+          (insert char))))))
 
 (defun markex-change-region-boundary (char)
   "Replace one character before region beginnig and one after region end with CHAR."
