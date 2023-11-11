@@ -160,6 +160,17 @@ EOF
 (ert-deftest markex-word--test-match ()
   (markex--test-match #'markex-word "foo-bar-baz" 5 8 :start 6))
 
+(ert-deftest markex-line--test-match ()
+  (markex--test-match #'markex-line "foo bar" 1 8 :start 5)
+  (markex--test-match #'markex-line "  foo bar" 3 10 :start 1)
+  (markex--test-match #'markex-line "foo bar   " 1 8 :start 10)
+  (markex--test-match #'markex-line " foo bar  " 2 9 :start 2))
+
+(ert-deftest markex-line--test-unmatch ()
+  (markex--test-unmatch #'markex-line "foo
+
+bar" :start 5))
+
 (ert-deftest markex-enlarge--test ()
   (with-temp-buffer
     (transient-mark-mode 1)
