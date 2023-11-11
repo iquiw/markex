@@ -25,21 +25,22 @@ $ git clone https://github.com/iquiw/markex.git
 
 ### Mark commands
 
-| Thing        | Key          | Description                      |
-| ---          | ---          | ---                              |
-| Number       | <kbd>#</kbd> | Mark number by regexp.           |
-| Symbol       | <kbd>'</kbd> | Mark symbol by thing.            |
-| Filename     | <kbd>/</kbd> | Mark filename by thing.          |
-| IPv4 address | <kbd>4</kbd> | Mark IPv4 address by regexp.     |
-| UUID         | <kbd>U</kbd> | Mark UUID by thing.              |
-| E-mail       | <kbd>e</kbd> | Mark E-mail by thing.            |
-| Face         | <kbd>f</kbd> | Mark same face.                  |
-| MAC address  | <kbd>m</kbd> | Mark MAC address by regexp.      |
-| Pair         | <kbd>p</kbd> | Mark pair by syntax.             |
-| String       | <kbd>s</kbd> | Mark inside of string by syntax. |
-| URL          | <kbd>u</kbd> | Mark URL by thing.               |
-| Version      | <kbd>v</kbd> | Mark version by regexp.          |
-| Word         | <kbd>w</kbd> | Mark word by thing.              |
+| Thing        | Key          | Description                            |
+| ---          | ---          | ---                                    |
+| Number       | <kbd>#</kbd> | Mark number by regexp.                 |
+| Symbol       | <kbd>'</kbd> | Mark symbol by thing.                  |
+| Filename     | <kbd>/</kbd> | Mark filename by thing.                |
+| IPv4 address | <kbd>4</kbd> | Mark IPv4 address by regexp.           |
+| UUID         | <kbd>U</kbd> | Mark UUID by thing.                    |
+| E-mail       | <kbd>e</kbd> | Mark E-mail by thing.                  |
+| Face         | <kbd>f</kbd> | Mark same face.                        |
+| Line         | <kbd>l</kbd> | Mark line with trimming spaces around. |
+| MAC address  | <kbd>m</kbd> | Mark MAC address by regexp.            |
+| Pair         | <kbd>p</kbd> | Mark pair by syntax.                   |
+| String       | <kbd>s</kbd> | Mark inside of string by syntax.       |
+| URL          | <kbd>u</kbd> | Mark URL by thing.                     |
+| Version      | <kbd>v</kbd> | Mark version by regexp.                |
+| Word         | <kbd>w</kbd> | Mark word by thing.                    |
 
 ### Manipulation commands
 

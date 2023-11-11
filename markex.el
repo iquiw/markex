@@ -48,6 +48,7 @@
   "c" #'markex-change-region-boundary
   "e" #'markex-email
   "f" #'markex-face
+  "l" #'markex-line
   "m" #'markex-mac
   "p" #'markex-pair
   "s" #'markex-string
@@ -264,6 +265,25 @@ First, it skip the CHARS backwards and regexp match with REGEXP."
 THING is the same meaing as in `bounds-of-thing-at-point'."
   (when-let ((bounds (bounds-of-thing-at-point thing)))
     (markex--select-bounds bounds)))
+
+;;
+;; Select region by structure.
+;;
+(defun markex-line ()
+  "Select line region with trimming spaces around."
+  (interactive)
+  (let ((beg (line-beginning-position))
+        (end (line-end-position)))
+    (markex--select-bounds
+     (cons
+      (progn
+        (goto-char beg)
+        (skip-syntax-forward " " end)
+        (point))
+      (progn
+        (goto-char end)
+        (skip-chars-backward " " beg)
+        (point))))))
 
 ;;
 ;; Select region by bounds.
