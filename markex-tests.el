@@ -66,6 +66,18 @@ Check if point is not moved."
   (markex--test-unmatch #'markex-number "123  456" :start 5)
   (markex--test-unmatch #'markex-number "#xgghhIIJJkkll" :start 5))
 
+(ert-deftest markex-space--test-match ()
+  (markex--test-match #'markex-space "   " 1 4 :start 2)
+  (markex--test-match #'markex-space "foo 	  bar" 4 8 :start 4)
+  (when (version< "28.0" emacs-version)
+    (markex--test-match #'markex-space "foo 　 bar" 4 7 :start 6)))
+
+(ert-deftest markex-space--test-unmatch ()
+  (markex--test-unmatch #'markex-space "foo" :start 1)
+  (markex--test-unmatch #'markex-space "foo 	  bar" :start 9)
+  (when (version< "28.0" emacs-version)
+    (markex--test-unmatch #'markex-space "foo 　 bar" :start 10)))
+
 (ert-deftest markex-string--test-match ()
   (markex--test-match #'markex-string "\"Hello, wolrd.\"" 2 15 :start 3)
   (markex--test-match #'markex-string "  \"foo\\\"bar\" " 4 12 :start 5)
