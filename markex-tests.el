@@ -71,7 +71,8 @@ Check if point is not moved."
   (markex--test-match #'markex-string "  \"foo\\\"bar\" " 4 12 :start 5)
   (markex--test-match #'markex-string " \"foo\" " 3 6 :start 2)
   (markex--test-match #'markex-string " \"foo\" " 3 6 :start 6)
-  (markex--test-match #'markex-string "\" \"" 2 3 :start 2))
+  (markex--test-match #'markex-string "\" \"" 2 3 :start 2)
+  (markex--test-match #'markex-string "\"\\\"foo\\\"\"" 2 9 :start 3))
 
 (ert-deftest markex-string--test-unmatch ()
   (markex--test-unmatch #'markex-string "foo")
