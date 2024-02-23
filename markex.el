@@ -37,6 +37,7 @@
 
 (defvar-keymap markex-command-map
   :prefix 'markex-prefix-command
+  "SPC" #'markex-space
   "#" #'markex-number
   "'" #'markex-symbol
   "+" #'markex-enlarge
@@ -216,6 +217,11 @@
   (interactive)
   (or (markex--regexp "#x0-9a-fA-F" "\\(0x\\|#x\\)\\([a-fA-F0-9]+\\)")
       (markex--regexp "0-9.-" "-?[0-9]+\\.?[0-9]*")))
+
+(defun markex-space ()
+  "Select space region."
+  (interactive)
+  (markex--regexp "[:space:]" "[[:space:]]+"))
 
 (defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
