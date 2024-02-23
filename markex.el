@@ -184,12 +184,11 @@
           beg
           (save-excursion
             (goto-char beg)
-            (while (and (< 0 (skip-syntax-forward "^\"|"))
+            (while (and (not (eobp))
                         (progn
                           (forward-char 1)
                           (ppss-string-terminator (syntax-ppss))))
-              ;; nop
-              )
+              (skip-syntax-forward "^\"|"))
             (if (eq (point) beg)
                 beg
               (1- (point))))))))))
