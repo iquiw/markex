@@ -69,6 +69,8 @@ Check if point is not moved."
 (ert-deftest markex-space--test-match ()
   (markex--test-match #'markex-space "   " 1 4 :start 2)
   (markex--test-match #'markex-space "foo 	  bar" 4 8 :start 4)
+  (markex--test-match #'markex-space "foo
+  bar" 5 7 :start 5)
   (when (version< "28.0" emacs-version)
     (markex--test-match #'markex-space "foo 　 bar" 4 7 :start 6)))
 
