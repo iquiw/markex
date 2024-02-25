@@ -221,7 +221,7 @@
 (defun markex-space ()
   "Select space region."
   (interactive)
-  (markex--regexp "[:space:]" "[[:space:]]+"))
+  (markex--regexp "[:blank:]" "[[:space:]]+"))
 
 (defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
