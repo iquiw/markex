@@ -37,6 +37,7 @@
 
 (defvar-keymap markex-command-map
   :prefix 'markex-prefix-command
+  :repeat t
   "SPC" #'markex-space
   "#" #'markex-number
   "'" #'markex-symbol
