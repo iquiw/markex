@@ -52,6 +52,7 @@
   "f" #'markex-face
   "l" #'markex-line
   "m" #'markex-mac
+  "n" #'markex-non-space
   "p" #'markex-pair
   "s" #'markex-string
   "u" #'markex-url
@@ -222,7 +223,12 @@
 (defun markex-space ()
   "Select space region."
   (interactive)
-  (markex--regexp "[:blank:]" "[[:space:]]+"))
+  (markex--regexp "[:blank:]" "[[:blank:]]+"))
+
+(defun markex-non-space ()
+  "Select non-space region."
+  (interactive)
+  (markex--regexp "^[:blank:][:cntrl:]" "[^[:blank:][:cntrl:]]+"))
 
 (defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
