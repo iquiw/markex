@@ -37,6 +37,7 @@ $ git clone https://github.com/iquiw/markex.git
 | Face         | <kbd>f</kbd>   | Mark same face.                        |
 | Line         | <kbd>l</kbd>   | Mark line with trimming spaces around. |
 | MAC address  | <kbd>m</kbd>   | Mark MAC address by regexp.            |
+| Non Space    | <kbd>n</kbd>   | Mark non-spaces by regexp.             |
 | Pair         | <kbd>p</kbd>   | Mark pair by syntax.                   |
 | String       | <kbd>s</kbd>   | Mark inside of string by syntax.       |
 | URL          | <kbd>u</kbd>   | Mark URL by thing.                     |

@@ -80,6 +80,17 @@ Check if point is not moved."
   (when (version< "28.0" emacs-version)
     (markex--test-unmatch #'markex-space "foo 　 bar" :start 10)))
 
+(ert-deftest markex-non-space--test-match ()
+  (markex--test-match #'markex-non-space "foo" 1 4 :start 2)
+  (markex--test-match #'markex-non-space "foo 	  bar-baz qux" 8 15 :start 10)
+  (markex--test-match #'markex-non-space "foo bar \"(baz_qux)\"" 9 20 :start 20))
+
+(ert-deftest markex-non-space--test-unmatch ()
+  (markex--test-unmatch #'markex-non-space "   " :start 1)
+  (markex--test-unmatch #'markex-non-space "foo 	  bar" :start 5)
+  (markex--test-unmatch #'markex-non-space "foo
+  bar" :start 5))
+
 (ert-deftest markex-string--test-match ()
   (markex--test-match #'markex-string "\"Hello, wolrd.\"" 2 15 :start 3)
   (markex--test-match #'markex-string "  \"foo\\\"bar\" " 4 12 :start 5)
