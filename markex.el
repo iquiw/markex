@@ -58,7 +58,8 @@
   "u" #'markex-url
   "v" #'markex-version
   "w" #'markex-word
-  "x" #'markex-delete-region-boundary)
+  "x" #'markex-delete-region-boundary
+  "y" #'markex-yank-swap)
 
 ;;
 ;; Region manipulation.
@@ -125,6 +126,18 @@
                   (= end (point-max)))
         (delete-region (1- beg) beg)
         (delete-region (1- end) end)))))
+
+(defun markex-yank-swap ()
+  "Swap selected region contents with the latest `kill-ring'."
+  (interactive)
+  (when (use-region-p)
+    (let* ((select-enable-primary nil)
+           (text (current-kill 0 t))
+           (beg (region-beginning)))
+      (let ((deactivate-mark nil))
+        (kill-region beg (region-end))
+        (insert-for-yank text))
+      (setq this-command #'yank))))
 
 ;;
 ;; Select region by face.
