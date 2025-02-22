@@ -46,13 +46,14 @@ $ git clone https://github.com/iquiw/markex.git
 
 ### Manipulation commands
 
-| Key          | Description                           |
-| ---          | ---                                   |
-| <kbd>+</kbd> | Enlarge region.                       |
-| <kbd>-</kbd> | Shrink region.                        |
-| <kbd>a</kbd> | Add characters on region boundary.    |
-| <kbd>c</kbd> | Change characters on region boundary. |
-| <kbd>x</kbd> | Delete characters on region boundary. |
+| Key          | Description                                              |
+| ---          | ---                                                      |
+| <kbd>+</kbd> | Enlarge region.                                          |
+| <kbd>-</kbd> | Shrink region.                                           |
+| <kbd>a</kbd> | Add characters on region boundary.                       |
+| <kbd>c</kbd> | Change characters on region boundary.                    |
+| <kbd>x</kbd> | Delete characters on region boundary.                    |
+| <kbd>y</kbd> | Swap selected region contents with the latest kill-ring. |
 
 ### Example
 
