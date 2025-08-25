@@ -5,7 +5,7 @@
 ;; Author: Iku Iwasa <iku.iwasa@gmail.com>
 ;; Version: 0.1.0
 ;; Keywords: matching
-;; Package-Requires: ((emacs "27.1") (compat "29.1.1.1"))
+;; Package-Requires: ((emacs "28.1") (compat "29.1.1.1"))
 ;; Homepage: https://github.com/iquiw/markex
 
 
@@ -37,7 +37,8 @@
 
 (defvar-keymap markex-command-map
   :prefix 'markex-prefix-command
-  :repeat t
+  :repeat (:exit (markex-reset))
+  "C-g" #'markex-reset
   "SPC" #'markex-space
   "#" #'markex-number
   "'" #'markex-symbol
@@ -60,6 +61,8 @@
   "w" #'markex-word
   "x" #'markex-delete-region-boundary
   "y" #'markex-yank-swap)
+
+(defvar-local markex--origin (make-marker))
 
 ;;
 ;; Region manipulation.
@@ -130,6 +133,7 @@
 (defun markex-yank-swap ()
   "Swap selected region contents with the latest `kill-ring'."
   (interactive)
+  (markex--reset-marker)
   (when (use-region-p)
     (let* ((select-enable-primary nil)
            (text (current-kill 0 t))
@@ -138,6 +142,14 @@
         (kill-region beg (region-end))
         (insert-for-yank text))
       (setq this-command #'yank))))
+
+(defun markex-reset ()
+  "Reset selection and back to the original point."
+  (interactive)
+  (when (marker-position markex--origin)
+    (goto-char markex--origin)
+    (markex--reset-marker t))
+  (deactivate-mark))
 
 ;;
 ;; Select region by face.
@@ -152,6 +164,7 @@
 (defun markex-face ()
   "Select region with the same face."
   (interactive)
+  (markex--reset-marker)
   (when-let* ((face (face-at-point))
               (end (save-excursion
                      (let ((prop (text-property-search-forward
@@ -173,6 +186,7 @@
 (defun markex-pair ()
   "Select pair region."
   (interactive)
+  (markex--reset-marker)
   (let ((ppss (if (= (syntax-class (syntax-after (point))) 4)
                   (save-excursion (syntax-ppss (1+ (point))))
                 (syntax-ppss))))
@@ -188,6 +202,7 @@
 (defun markex-string ()
   "Select inside string region."
   (interactive)
+  (markex--reset-marker)
   (let ((ppss (syntax-ppss)))
     (when (or (ppss-string-terminator ppss)
               ;; in case of start of string.
@@ -246,6 +261,7 @@
 (defun markex--regexp (chars regexp)
   "Select region matched with CHARS and REGEXP.
 First, it skip the CHARS backwards and regexp match with REGEXP."
+  (markex--reset-marker)
   (when-let ((bounds (save-excursion
                        (when (and (skip-chars-backward chars)
                                   (looking-at regexp))
@@ -288,6 +304,7 @@ First, it skip the CHARS backwards and regexp match with REGEXP."
 (defun markex--thing (thing)
   "Select a thing at the point.
 THING is the same meaing as in `bounds-of-thing-at-point'."
+  (markex--reset-marker)
   (when-let ((bounds (bounds-of-thing-at-point thing)))
     (markex--select-bounds bounds)))
 
@@ -297,15 +314,16 @@ THING is the same meaing as in `bounds-of-thing-at-point'."
 (defun markex-line ()
   "Select line region with trimming spaces around."
   (interactive)
+  (markex--reset-marker)
   (let ((beg (line-beginning-position))
         (end (line-end-position)))
     (markex--select-bounds
      (cons
-      (progn
+      (save-excursion
         (goto-char beg)
         (skip-syntax-forward " " end)
         (point))
-      (progn
+      (save-excursion
         (goto-char end)
         (skip-chars-backward " " beg)
         (point))))))
@@ -319,11 +337,29 @@ BOUNDS is a cons of (beg . end) region."
   (let ((beg (car bounds))
         (end (cdr bounds)))
     (when (/= beg end)
-      ;; copied from expand-region `er--prepare-expanding'.
-      (push-mark nil t) ;; one for keeping starting position
-      (push-mark nil t) ;; one for replace by set-mark in expansions
+      (unless (markex--repeat-in-progress)
+        ;; copied from expand-region `er--prepare-expanding'.
+        (markex--set-marker (point))
+        (push-mark nil t) ;; one for keeping starting position
+        (push-mark nil t)) ;; one for replace by set-mark in expansions
       (set-mark end)
       (goto-char beg))))
+
+;;
+;; Marker manipulation.
+;;
+(defun markex--repeat-in-progress ()
+  "Return non-nil if repeat is in progress."
+  (and (boundp 'repeat-mode) repeat-mode repeat-in-progress))
+
+(defun markex--reset-marker (&optional force)
+  "Reset the marker if FORCE is non-nil or repeat is not in progress."
+  (when (or force (not (markex--repeat-in-progress)))
+    (set-marker markex--origin nil)))
+
+(defun markex--set-marker (point)
+  "Set the marker to the POINT."
+  (set-marker markex--origin (point)))
 
 (provide 'markex)
 ;;; markex.el ends here
